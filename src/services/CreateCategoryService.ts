@@ -1,4 +1,4 @@
-import CategoriesRepository from "../repositories/CategoriesRepository";
+import { ICategoriesRepository } from "../repositories/ICategoriesRepository";
 
 interface ICreateCategory {
     name: string;
@@ -7,7 +7,7 @@ interface ICreateCategory {
 
 class CreateCategoryService {
     // eslint-disable-next-line no-useless-constructor
-    constructor(private categoryRepositories: CategoriesRepository) {}
+    constructor(private categoryRepositories: ICategoriesRepository) {}
 
     execute({ name, description }: ICreateCategory): void {
         const categoryAlreadyExists =
