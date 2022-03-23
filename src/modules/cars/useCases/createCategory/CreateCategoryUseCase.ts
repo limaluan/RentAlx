@@ -1,9 +1,9 @@
 import {
     ICategoriesRepository,
     ICreateCategoryDTO,
-} from "../repositories/ICategoriesRepository";
+} from "../../repositories/ICategoriesRepository";
 
-class CreateCategoryService {
+class CreateCategoryUseCase {
     constructor(private categoryRepositories: ICategoriesRepository) {}
 
     execute({ name, description }: ICreateCategoryDTO): void {
@@ -18,4 +18,4 @@ class CreateCategoryService {
     }
 }
 
-export default CreateCategoryService;
+export default CreateCategoryUseCase;
