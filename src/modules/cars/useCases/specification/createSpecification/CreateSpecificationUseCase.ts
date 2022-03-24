@@ -1,9 +1,9 @@
 import {
     ICreateSpecificationDTO,
     ISpecificationsRepository,
-} from "../repositories/ISpecificationsRepository";
+} from "../../../repositories/ISpecificationsRepository";
 
-class CreateSpecificationService {
+class CreateSpecificationUseCase {
     constructor(private specificationRepository: ISpecificationsRepository) {}
 
     execute({ name, description }: ICreateSpecificationDTO): void {
@@ -18,4 +18,4 @@ class CreateSpecificationService {
     }
 }
 
-export default CreateSpecificationService;
+export default CreateSpecificationUseCase;
