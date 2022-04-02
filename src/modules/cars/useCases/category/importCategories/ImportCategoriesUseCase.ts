@@ -1,18 +1,54 @@
 import fs from "fs";
 import { parse } from "csv-parse";
+import CategoriesRepository from "../../../repositories/implementations/CategoriesRepository";
+
+interface IImportCategory {
+    name: string;
+    description: string;
+}
 
 class ImportCategoriesUseCase {
+    constructor(private categoriesRepository: CategoriesRepository) {}
+
     // eslint-disable-next-line class-methods-use-this
-    execute(file: Express.Multer.File) {
-        const stream = fs.createReadStream(file.path);
+    loadCategories(file: Express.Multer.File): Promise<IImportCategory[]> {
+        return new Promise((resolve, reject) => {
+            const categories: IImportCategory[] = [];
 
-        const parseFile = parse();
+            const stream = fs.createReadStream(file.path);
+            const parseFile = parse();
 
-        stream.pipe(parseFile); // Joga a steam dentro do parseFile que por sua vez converte o arquivo csv
+            stream.pipe(parseFile);
 
-        parseFile.on("data", async line => {
-            // Fica atualizando de acordo com a leitura de novos dados do parseFile
-            console.log(line);
+            parseFile
+                .on("data", async line => {
+                    const [name, description] = line;
+                    categories.push({ name, description });
+                })
+                .on("end", () => {
+                    resolve(categories);
+                })
+                .on("error", err => {
+                    reject(err);
+                });
+        });
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    async execute(file: Express.Multer.File): Promise<void> {
+        const categories = await this.loadCategories(file);
+
+        categories.map(async category => {
+            const { name, description } = category;
+
+            const alreadyExists = this.categoriesRepository.findByName(name);
+
+            if (!alreadyExists) {
+                this.categoriesRepository.create({
+                    name,
+                    description,
+                });
+            }
         });
     }
 }
