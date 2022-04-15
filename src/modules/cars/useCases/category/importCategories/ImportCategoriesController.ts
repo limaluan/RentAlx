@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
+import { container } from "tsyringe";
 
 import ImportCategoriesUseCase from "./ImportCategoriesUseCase";
 
 class ImportCategoriesController {
-    constructor(private importCategoriesUseCase: ImportCategoriesUseCase) {}
-
-    // eslint-disable-next-line class-methods-use-this
-    handle(request: Request, response: Response) {
+    async handle(request: Request, response: Response) {
+        const importCategoriesUseCase = container.resolve(
+            ImportCategoriesUseCase,
+        );
         const { file } = request;
 
-        this.importCategoriesUseCase.execute(file);
+        await importCategoriesUseCase.execute(file);
 
         return response.send();
     }
