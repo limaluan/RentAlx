@@ -3,6 +3,7 @@ import { hash } from "bcryptjs";
 
 import ICreateUserDTO from "../../dtos/ICreateUserDTO";
 import IUsersRepository from "../../repositories/IUsersRepository";
+import { AppError } from "../../../../errors/AppError";
 
 @injectable()
 class CreateUserUseCase {
@@ -17,7 +18,7 @@ class CreateUserUseCase {
         );
 
         if (emailAlreadyExists) {
-            throw new Error("Email Already taken.");
+            throw new AppError("Email Already taken.");
         }
 
         Object.assign(data, {

@@ -1,4 +1,5 @@
 import { inject, injectable } from "tsyringe";
+import { AppError } from "../../../../../errors/AppError";
 import {
     ICategoriesRepository,
     ICreateCategoryDTO,
@@ -16,7 +17,7 @@ class CreateCategoryUseCase {
             await this.categoryRepositories.findByName(name);
 
         if (categoryAlreadyExists) {
-            throw new Error("Category Already Exists");
+            throw new AppError("Category Already Exists");
         }
 
         return this.categoryRepositories.create({ name, description });
