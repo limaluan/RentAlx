@@ -33,6 +33,11 @@ export default async function ensureAuthenticated(
             throw new AppError("User does not exists", 401);
         }
 
+        // Adicionar o tipo "user" ao request pelo "/@types/express/index.ts"
+        request.user = {
+            id: userId,
+        };
+
         next();
     } catch {
         throw new AppError("Invalid Token", 401);
